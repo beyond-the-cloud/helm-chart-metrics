@@ -1,0 +1,60 @@
+## Configuration for kube-prometheus-stack subchart
+##
+kube-prometheus-stack:
+  grafana:
+    dashboardProviders:
+      dashboardproviders.yaml:
+        apiVersion: 1
+        providers:
+        - name: 'default'
+          orgId: 1
+          folder: ''
+          type: file
+          disableDelete: false
+          editable: true
+          options:
+            path: /var/lib/grafana/dashboards/default
+    dashboards:
+      default:
+        kubernetes:
+          gnetId: 6417
+          revision: 1
+          datasource: Prometheus
+        kafka:
+          gnetId: 7589
+          revision: 1
+          datasource: Prometheus
+        elasticsearch:
+          gnetId: 9746
+          revision: 1
+          datasource: Prometheus
+
+## Configuration for prometheus-pushgateway subchart
+##
+prometheus-pushgateway:
+  serviceMonitor:
+    enabled: truekube
+    additionalLabels:
+      release: prometheus
+
+## Configuration for prometheus-kafka-exporter subchart
+##
+prometheus-kafka-exporter:
+  kafkaServer:
+    - kafka:9092
+  prometheus:
+    serviceMonitor:
+      enabled: true
+      additionalLabels:
+        release: prometheus
+
+## Configuration for prometheus-elasticsearch-exporter subchart
+##
+prometheus-elasticsearch-exporter:
+  es:
+    uri: http://elasticsearch-master:9200
+  serviceMonitor:
+    enabled: true
+    namespace: monitoring
+    labels:
+      release: prometheus
