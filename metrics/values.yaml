@@ -28,6 +28,78 @@ kube-prometheus-stack:
           gnetId: 9746
           revision: 1
           datasource: Prometheus
+  prometheus:
+    prometheusSpec:
+      additionalScrapeConfigs:
+      - job_name: webapp
+        tls_config:
+          insecure_skip_verify: true
+        metrics_path: '/actuator/prometheus'
+        scrape_interval: 15s
+        kubernetes_sd_configs:
+        - role: pod
+        relabel_configs:
+        # "prometheus.io/scrape = true" annotation.
+        - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+          action: keep
+          regex: true
+        # "prometheus.io/path = <metric path>" annotation.
+        - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+          action: keep
+          regex: /actuator/prometheus
+        # "prometheus.io/port = <port>" annotation.
+        - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_port]
+          action: keep
+          regex: 8080
+        - source_labels: [__meta_kubernetes_namespace]
+          action: keep
+          regex: default
+      - job_name: processor-webapp
+        tls_config:
+          insecure_skip_verify: true
+        metrics_path: '/metrics'
+        scrape_interval: 15s
+        kubernetes_sd_configs:
+        - role: pod
+        relabel_configs:
+        # "prometheus.io/scrape = true" annotation.
+        - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+          action: keep
+          regex: true
+        # "prometheus.io/path = <metric path>" annotation.
+        - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+          action: keep
+          regex: /actuator/prometheus
+        # "prometheus.io/port = <port>" annotation.
+        - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_port]
+          action: keep
+          regex: 8080
+        - source_labels: [__meta_kubernetes_namespace]
+          action: keep
+          regex: default
+      - job_name: notifier-webapp
+        tls_config:
+          insecure_skip_verify: true
+        metrics_path: '/actuator/prometheus'
+        scrape_interval: 15s
+        kubernetes_sd_configs:
+        - role: pod
+        relabel_configs:
+        # "prometheus.io/scrape = true" annotation.
+        - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+          action: keep
+          regex: true
+        # "prometheus.io/path = <metric path>" annotation.
+        - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+          action: keep
+          regex: /actuator/prometheus
+        # "prometheus.io/port = <port>" annotation.
+        - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_port]
+          action: keep
+          regex: 8080
+        - source_labels: [__meta_kubernetes_namespace]
+          action: keep
+          regex: default
 
 ## Configuration for prometheus-pushgateway subchart
 ##
