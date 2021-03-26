@@ -1,7 +1,9 @@
 ## Configuration for kube-prometheus-stack subchart
 ##
 kube-prometheus-stack:
+  namespaceOverride: monitoring
   grafana:
+    namespaceOverride: monitoring
     dashboardProviders:
       dashboardproviders.yaml:
         apiVersion: 1
@@ -69,7 +71,7 @@ kube-prometheus-stack:
         # "prometheus.io/path = <metric path>" annotation.
         - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
           action: keep
-          regex: /actuator/prometheus
+          regex: /metrics
         # "prometheus.io/port = <port>" annotation.
         - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_port]
           action: keep
@@ -100,6 +102,10 @@ kube-prometheus-stack:
         - source_labels: [__meta_kubernetes_namespace]
           action: keep
           regex: default
+  kube-state-metrics:
+    namespaceOverride: monitoring
+  prometheus-node-exporter:
+    namespaceOverride: monitoring
 
 ## Configuration for prometheus-pushgateway subchart
 ##
