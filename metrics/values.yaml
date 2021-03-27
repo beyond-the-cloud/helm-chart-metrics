@@ -16,6 +16,14 @@ kube-prometheus-stack:
           editable: true
           options:
             path: /var/lib/grafana/dashboards/default
+        - name: 'application'
+          orgId: 1
+          folder: ''
+          type: file
+          disableDelete: false
+          editable: true
+          options:
+            path: /var/lib/grafana/dashboards/application
     dashboards:
       default:
         kubernetes:
@@ -30,6 +38,8 @@ kube-prometheus-stack:
           gnetId: 9746
           revision: 1
           datasource: Prometheus
+    dashboardsConfigMaps:
+      application: grafana-dashboard-configmap
   prometheus:
     prometheusSpec:
       additionalScrapeConfigs:
