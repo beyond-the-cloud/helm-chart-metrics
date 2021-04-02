@@ -1,7 +1,6 @@
 # helm-chart-metrics
 
 Repository for Prometheus &amp; Grafana Helm Chart
-
 ## Deploy the helm chart
 
 1. Download dependencies
